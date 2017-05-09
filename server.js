@@ -21,10 +21,14 @@ app.post('/', function(req, res, next) {
     var request_url = req.body.get_url;
 
 	request(request_url, function (error, response, body) {
-  		console.log('error:', error); // Print the error if one occurred 
-  		console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received 
   		console.log('body:', body);
-  		res.send(body);
+  		var fields = []
+  		var regex = /<input[\s\S]*?name="(.*?)"/g
+		var item
+		while (item = regex.exec(body))
+			fields.push(item[1]);
+      fields = fields.join(',');
+  		res.send(fields);
 	});
 	
 });
