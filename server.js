@@ -14,13 +14,15 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json());
 
 
-app.post('/', function(req, res, next) {
+app.post('/input-scraper', function(req, res, next) {
 	//var webpage_html = ''
 	//var fields = ''
 	//var webpage_regex = /<input.*name="(.*?)"/g;
     console.log("Webhook received!");
     console.log("Url to GET: " + req.body.get_url)
     var request_url = req.body.get_url;
+    var username = req.body.username;
+    var api_key = req.body.api_key;
 
 	request(request_url, function (error, response, body) {
   		console.log('body:', body);
@@ -35,8 +37,48 @@ app.post('/', function(req, res, next) {
 	
 });
 
+app.post('/test-tool', function(req, res, next) {
+    var flow_id = req.body.posting_url.split('/')[4];
+    var username = req.body.username;
+    var api_key = req.body.api_key;
+    base_64_encoded  = new Buffer(username + ":" + api_key).toString('base64');
+    var options = {
+      url: "https://next.leadconduit.com/flows/" + flow_id + "/fields",
+      headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Basic ' + base_64_encoded
+      }
+    }
+
+    request(options, function (error, response, body) {
+      var field_pairs = {};
+      var field_names = [];
+      var field_ids = [];
+      var json_object = JSON.parse(body);
+      json_object.forEach(function(field) {
+        field_ids.push(field.id)
+        field_names.push(field.name)
+        
+        /*res.send(fields_ids);*/
+      });
+      for (var i = 0; i < field_names.length; i++) {
+        field_pairs[field_names[i]] = field_ids[i];
+      }
+      res.send(field_pairs);
+    });
+});
+
 
 app.listen(PORT, function () {
   	console.log('Listening on port 8080!');
 });
 
+/* var request = new Request("https://next.leadconduit.com/flows/" + flow_id + "/fields", {
+        method: 'GET', 
+        headers: new Headers({
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/vnd.com.leadconduit.field+json',
+          'Authorization': 'Basic ' + base_64_encode
+        })
+      });
+*/
