@@ -14,7 +14,7 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json());
 
 
-app.post('/input-scraper', function(req, res, next) {
+app.post('/', function(req, res, next) {
 	//var webpage_html = ''
 	//var fields = ''
 	//var webpage_regex = /<input.*name="(.*?)"/g;
@@ -39,9 +39,10 @@ app.post('/input-scraper', function(req, res, next) {
 
 app.post('/test-tool', function(req, res, next) {
     var flow_id = req.body.posting_url.split('/')[4];
-    var username = req.body.username;
+
+
     var api_key = req.body.api_key;
-    base_64_encoded  = new Buffer(username + ":" + api_key).toString('base64');
+    base_64_encoded  = new Buffer('gettingstarted' + ":" + api_key).toString('base64');
     var options = {
       url: "https://next.leadconduit.com/flows/" + flow_id + "/fields",
       headers: {
@@ -54,17 +55,24 @@ app.post('/test-tool', function(req, res, next) {
       var field_pairs = {};
       var field_names = [];
       var field_ids = [];
-      var json_object = JSON.parse(body);
-      json_object.forEach(function(field) {
-        field_ids.push(field.id)
-        field_names.push(field.name)
-        
-        /*res.send(fields_ids);*/
-      });
-      for (var i = 0; i < field_names.length; i++) {
-        field_pairs[field_names[i]] = field_ids[i];
+
+      console.log(response.statusCode)
+      if (response.statusCode === 200) {
+        var json_object = JSON.parse(body);
+        json_object.forEach(function(field) {
+          field_ids.push(field.id)
+          field_names.push(field.name)
+          
+          /*res.send(fields_ids);*/
+        });
+        for (var i = 0; i < field_names.length; i++) {
+          field_pairs[field_names[i]] = field_ids[i];
+        }
+        res.send(field_pairs);
+      } else {
+        res.send({response: 'none'})
       }
-      res.send(field_pairs);
+      
     });
 });
 
