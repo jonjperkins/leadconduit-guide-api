@@ -57,14 +57,14 @@ app.post('/test-tool', function(req, res, next) {
       var field_ids = [];
 
       console.log(response.statusCode)
-      if (response.statusCode === 200) {
-        var json_object = JSON.parse(body);
-        json_object.forEach(function(field) {
-          field_ids.push(field.id)
-          field_names.push(field.name)
+      var json_object = JSON.parse(body);
+      if (json_object.length > 0) {
+        for (var i = 0; i < json_object.length; i++) {
+          field_ids.push(json_object[i].id)
+          field_names.push(json_object[i].name)
           
           /*res.send(fields_ids);*/
-        });
+        };
         for (var i = 0; i < field_names.length; i++) {
           field_pairs[field_names[i]] = field_ids[i];
         }
