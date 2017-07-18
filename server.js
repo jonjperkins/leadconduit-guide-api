@@ -39,10 +39,9 @@ app.post('/', function(req, res, next) {
 
 app.post('/test-tool', function(req, res, next) {
     var flow_id = req.body.posting_url.split('/')[4];
-
-
     var api_key = req.body.api_key;
     base_64_encoded  = new Buffer('gettingstarted' + ":" + api_key).toString('base64');
+    
     var options = {
       url: "https://next.leadconduit.com/flows/" + flow_id + "/fields",
       headers: {
@@ -76,6 +75,33 @@ app.post('/test-tool', function(req, res, next) {
     });
 });
 
+app.post('/flow-name', function(req, res, next) {
+    var flow_id = req.body.posting_url.split('/')[4];
+    var api_key = req.body.api_key;
+    base_64_encoded  = new Buffer('gettingstarted' + ":" + api_key).toString('base64');
+    
+    var options = {
+      url: "https://next.leadconduit.com/flows/" + flow_id,
+      headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Basic ' + base_64_encoded
+      }
+    }
+    
+    request(options, function (error, response, body) {
+
+      var json_object = JSON.parse(body);
+      if ( json_object.hasOwnProperty("name")) {
+        var flow_name = json_object.name
+        console.log(json_object.name)
+        res.send(flow_name);
+      } else {
+        res.send({response: 'no name'})
+      }
+      
+    });
+})
+
 
 app.listen(PORT, function () {
   	console.log('Listening on port 8080!');
@@ -90,3 +116,5 @@ app.listen(PORT, function () {
         })
       });
 */
+
+
