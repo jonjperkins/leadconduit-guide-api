@@ -5,8 +5,6 @@ Express server used to access the LeadConduit API for the Getting Started Guide 
 ## **URL**
 http://leadconduit-node-server.herokuapp.com
 
-## **Endpoints**
-
 ## **/test-tool**
 
 **About**: Get field data from a flow.
