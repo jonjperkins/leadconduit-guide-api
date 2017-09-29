@@ -7,7 +7,7 @@ http://leadconduit-node-server.herokuapp.com
 
 ## **Endpoints**
 
-###**/test-tool**
+### **/test-tool**
 
 **About**: Get field data from a flow.
 
@@ -23,7 +23,7 @@ http://leadconduit-node-server.herokuapp.com
 * **example** { "First Name": "first_name"}
 
 
-###**/flow-name**
+### **/flow-name**
 
 **About**: Get the name of the flow.
 
@@ -39,7 +39,7 @@ http://leadconduit-node-server.herokuapp.com
 * **example** "Flow Name"
 
 
-###**/trusted-form-errors**
+### **/trusted-form-errors**
 
 **About**: Finds all TrustedForm certificate claim errors in an account in the last 3 days and resubmits those certificates via the TrustedForm API.
 
